@@ -15,6 +15,8 @@
 @protocol EGOImageLoaderObserver;
 @interface EGOImageLoader : NSObject {
 @private
+	NSDictionary* _currentOperations;
+	NSMutableDictionary* currentOperations;
 	NSOperationQueue* operationQueue;
 }
 
@@ -28,6 +30,8 @@
 - (void)increaseImageLoadPriorityForURL:(NSURL*)aURL;
 - (void)decreaseImageLoadPriorityForURL:(NSURL*)aURL;	
 
+@property(nonatomic,retain) NSDictionary* currentOperations;
+@property(nonatomic,assign,getter=isSuspended) BOOL suspended;
 @end
 
 @protocol EGOImageLoaderObserver<NSObject>

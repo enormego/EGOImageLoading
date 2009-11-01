@@ -12,8 +12,8 @@
 
 #import "EGOImageLoader.h"
 #import "EGOCache.h"
+#import "EGOImageLoadOperation.h"
 #import "Reachability.h"
-#import "ASIHTTPRequest.h"
 
 static EGOImageLoader* __imageLoader;
 
@@ -25,6 +25,7 @@ inline static NSString* keyForURL(NSURL* url) {
 #define kImageNotificationLoadFailed(s) [@"kEGOImageLoaderNotificationLoadFailed-" stringByAppendingString:keyForURL(s)]
 
 @implementation EGOImageLoader
+@synthesize currentOperations=_currentOperations;
 
 + (EGOImageLoader*)sharedImageLoader {
 	@synchronized(self) {
@@ -48,44 +49,37 @@ inline static NSString* keyForURL(NSURL* url) {
 	return self;
 }
 
-- (ASIHTTPRequest*)loadingRequestForURL:(NSURL*)aURL {
-	NSArray* operations = [[[operationQueue operations] copy] autorelease];
+- (EGOImageLoadOperation*)loadingOperationForURL:(NSURL*)aURL {
+	EGOImageLoadOperation* operation = [[self.currentOperations objectForKey:aURL] retain];
+	if(!operation) return nil;
 	
-	for(ASIHTTPRequest* operation in operations) {
-		if(![operation isKindOfClass:[ASIHTTPRequest class]]) continue;
-		
-		if(![operation isFinished] && ![operation isCancelled] && ![operation isExecuting]) {
-			if([operation.url isEqual:aURL]) return [[operation retain] autorelease];
-		}
+	if(![operation isFinished] && ![operation isCancelled] && ![operation isExecuting]) {
+		return [operation autorelease];
+	} else {
+		[operation release];
+		return nil;
 	}
-	
-	return nil;
 }
 
 - (BOOL)isLoadingImageURL:(NSURL*)aURL {
-	return [self loadingRequestForURL:aURL] ? YES : NO;
+	return [self loadingOperationForURL:aURL] ? YES : NO;
 }
 
 - (void)cancelLoadForURL:(NSURL*)aURL {
-	ASIHTTPRequest* request = [self loadingRequestForURL:aURL];
-	request.delegate = nil;
-	[request cancel];
+	EGOImageLoadOperation* operation = [self loadingOperationForURL:aURL];
+	[operation cancel];
 }
 
 - (void)increaseImageLoadPriorityForURL:(NSURL*)aURL {
-	ASIHTTPRequest* request = [self loadingRequestForURL:aURL];
-	
-	if(![request isFinished] && ![request isCancelled] && ![request isExecuting]) {
-		request.queuePriority = NSOperationQueuePriorityHigh;
-	}
+	EGOImageLoadOperation* operation = [[self loadingOperationForURL:aURL] retain];
+	operation.queuePriority = NSOperationQueuePriorityHigh;
+	[operation release];
 }
 
 - (void)decreaseImageLoadPriorityForURL:(NSURL*)aURL {
-	ASIHTTPRequest* request = [self loadingRequestForURL:aURL];
-
-	if(![request isFinished] && ![request isCancelled] && ![request isExecuting]) {
-		request.queuePriority = NSOperationQueuePriorityLow;
-	}
+	EGOImageLoadOperation* operation = [[self loadingOperationForURL:aURL] retain];
+	operation.queuePriority = NSOperationQueuePriorityLow;
+	[operation release];
 }
 
 - (void)loadImageForURL:(NSURL*)aURL observer:(id<EGOImageLoaderObserver>)observer {
@@ -97,23 +91,23 @@ inline static NSString* keyForURL(NSURL* url) {
 		[[NSNotificationCenter defaultCenter] addObserver:observer selector:@selector(imageLoaderDidFailToLoad:) name:kImageNotificationLoadFailed(aURL) object:self];
 	}
 	
-	ASIHTTPRequest* request;
-	if((request = [[[self loadingRequestForURL:aURL] retain] autorelease])) {
-		if(![request isFinished] && ![request isCancelled] && ![request isExecuting]) {
-			request.queuePriority = NSOperationQueuePriorityHigh;
+	EGOImageLoadOperation* operation;
+	if((operation = [[self loadingOperationForURL:aURL] retain])) {
+		if(![operation isFinished] && ![operation isCancelled] && ![operation isExecuting]) {
+			operation.queuePriority = NSOperationQueuePriorityHigh;
 		}
 		
+		[operation release];
 		return;
 	}
 		
-	request = [[ASIHTTPRequest alloc] initWithURL:aURL];
-	request.queuePriority = NSOperationQueuePriorityHigh;
-	request.timeOutSeconds = 30.0;
-	request.delegate = self;
-	request.didFinishSelector = @selector(imageLoadFinished:);
-	request.didFailSelector = @selector(imageLoadFailed:);
-	[operationQueue addOperation:request];
-	[request release];
+	operation = [[EGOImageLoadOperation alloc] initWithImageURL:aURL];
+	operation.queuePriority = NSOperationQueuePriorityHigh;
+	operation.timeoutInterval = 30.0;
+	operation.delegate = (id<EGOImageLoadOperationDelegate>)self;
+	[operationQueue addOperation:operation];
+	[currentOperations setObject:operation forKey:operation.imageURL];
+	self.currentOperations = [[currentOperations copy] autorelease];
 }
 
 - (UIImage*)imageForURL:(NSURL*)aURL shouldLoadWithObserver:(id<EGOImageLoaderObserver>)observer {
@@ -129,50 +123,58 @@ inline static NSString* keyForURL(NSURL* url) {
 
 #pragma mark -
 #pragma mark Request methods
-- (void)imageLoadFinished:(ASIHTTPRequest*)request {
-	if(request.responseStatusCode != 200) {
-		NSError* error = [NSError errorWithDomain:[request.url host] code:request.responseStatusCode userInfo:nil];
-		NSNotification* notification = [NSNotification notificationWithName:kImageNotificationLoadFailed(request.url)
-																	 object:self
-																   userInfo:[NSDictionary dictionaryWithObjectsAndKeys:error,@"error",request.url,@"imageURL",nil]];
-		
-		[[NSNotificationCenter defaultCenter] performSelectorOnMainThread:@selector(postNotification:) withObject:notification waitUntilDone:YES];
-		return;
-	}
-	
-	NSData* responseData = [request responseData];
-	UIImage* anImage = [UIImage imageWithData:responseData];
+- (void)imageLoadOperation:(EGOImageLoadOperation*)operation didFinishWithData:(NSData*)imageData {
+	UIImage* anImage = [UIImage imageWithData:imageData];
 	
 	if(!anImage) {
-		NSError* error = [NSError errorWithDomain:[request.url host] code:406 userInfo:nil];
-		NSNotification* notification = [NSNotification notificationWithName:kImageNotificationLoadFailed(request.url)
+		NSError* error = [NSError errorWithDomain:[operation.imageURL host] code:406 userInfo:nil];
+		NSNotification* notification = [NSNotification notificationWithName:kImageNotificationLoadFailed(operation.imageURL)
 																	 object:self
-																   userInfo:[NSDictionary dictionaryWithObjectsAndKeys:error,@"error",request.url,@"imageURL",nil]];
+																   userInfo:[NSDictionary dictionaryWithObjectsAndKeys:error,@"error",operation.imageURL,@"imageURL",nil]];
 		
 		[[NSNotificationCenter defaultCenter] performSelectorOnMainThread:@selector(postNotification:) withObject:notification waitUntilDone:YES];
 		return;
 	}
 	
-	[[EGOCache currentCache] setData:responseData forKey:keyForURL(request.url) withTimeoutInterval:604800];
+	[[EGOCache currentCache] setData:imageData forKey:keyForURL(operation.imageURL) withTimeoutInterval:604800];
 	
-	NSNotification* notification = [NSNotification notificationWithName:kImageNotificationLoaded(request.url)
+	[currentOperations removeObjectForKey:operation.imageURL];
+	self.currentOperations = [[currentOperations copy] autorelease];
+	
+	NSNotification* notification = [NSNotification notificationWithName:kImageNotificationLoaded(operation.imageURL)
 																 object:self
-															   userInfo:[NSDictionary dictionaryWithObjectsAndKeys:anImage,@"image",request.url,@"imageURL",nil]];
+															   userInfo:[NSDictionary dictionaryWithObjectsAndKeys:anImage,@"image",operation.imageURL,@"imageURL",nil]];
 	
 	[[NSNotificationCenter defaultCenter] performSelectorOnMainThread:@selector(postNotification:) withObject:notification waitUntilDone:YES];
 }
 
-- (void)imageLoadFailed:(ASIHTTPRequest*)request {
-	NSNotification* notification = [NSNotification notificationWithName:kImageNotificationLoadFailed(request.url)
-																 object:self
-															   userInfo:[NSDictionary dictionaryWithObject:request.error forKey:@"error"]];
+- (void)imageLoadOperationDidFail:(EGOImageLoadOperation*)operation {
+	[currentOperations removeObjectForKey:operation.imageURL];
+	self.currentOperations = [[currentOperations copy] autorelease];
 
+	NSError* error = [NSError errorWithDomain:[operation.imageURL host] code:406 userInfo:nil];
+	NSNotification* notification = [NSNotification notificationWithName:kImageNotificationLoadFailed(operation.imageURL)
+																 object:self
+															   userInfo:[NSDictionary dictionaryWithObjectsAndKeys:error,@"error",operation.imageURL,@"imageURL",nil]];
+	
 	[[NSNotificationCenter defaultCenter] performSelectorOnMainThread:@selector(postNotification:) withObject:notification waitUntilDone:YES];
 }
 
 #pragma mark -
 
+- (BOOL)isSuspended {
+	return [operationQueue isSuspended];	
+}
+
+- (void)setSuspended:(BOOL)isSuspended {
+	[operationQueue setSuspended:isSuspended];
+}
+
+#pragma mark -
+
 - (void)dealloc {
+	self.currentOperations = nil;
+	[currentOperations release];
 	[operationQueue release];
 	[super dealloc];
 }

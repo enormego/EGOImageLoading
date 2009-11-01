@@ -11,22 +11,18 @@
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
-		2826AAAC108D426D007FBD1D /* ASIAuthenticationDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 2826AAA3108D426D007FBD1D /* ASIAuthenticationDialog.m */; };
-		2826AAAD108D426D007FBD1D /* ASIHTTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 2826AAA5108D426D007FBD1D /* ASIHTTPRequest.m */; };
-		2826AAAE108D426D007FBD1D /* ASIInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 2826AAA7108D426D007FBD1D /* ASIInputStream.m */; };
-		2826AAAF108D426D007FBD1D /* ASINetworkQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 2826AAA9108D426D007FBD1D /* ASINetworkQueue.m */; };
-		2826AAB0108D426D007FBD1D /* ASINSStringAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2826AAAB108D426D007FBD1D /* ASINSStringAdditions.m */; };
 		2826AB4D108D4295007FBD1D /* EGOCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 2826AB0F108D4295007FBD1D /* EGOCache.m */; };
 		2826AB4E108D4295007FBD1D /* EGOImageButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 2826AB12108D4295007FBD1D /* EGOImageButton.m */; };
 		2826AB4F108D4295007FBD1D /* EGOImageLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 2826AB15108D4295007FBD1D /* EGOImageLoader.m */; };
 		2826AB50108D4295007FBD1D /* EGOImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2826AB18108D4295007FBD1D /* EGOImageView.m */; };
-		2826AB58108D4416007FBD1D /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 2826AB57108D4416007FBD1D /* Reachability.m */; };
 		2826AB61108D44CD007FBD1D /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2826AB60108D44CD007FBD1D /* CFNetwork.framework */; };
 		2826AB68108D44F3007FBD1D /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2826AB67108D44F3007FBD1D /* libz.dylib */; };
 		2826AB6D108D4504007FBD1D /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2826AB6C108D4504007FBD1D /* SystemConfiguration.framework */; };
 		2826AB8E108D5160007FBD1D /* ExampleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2826AB8D108D5160007FBD1D /* ExampleCell.m */; };
 		2826AB90108D5258007FBD1D /* placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 2826AB8F108D5258007FBD1D /* placeholder.png */; };
 		2826ABDB108D56AE007FBD1D /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 2826ABDA108D56AE007FBD1D /* icon.png */; };
+		28661A7B109E3D6800975186 /* EGOImageLoadOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 28661A7A109E3D6800975186 /* EGOImageLoadOperation.m */; };
+		28661A83109E3DAC00975186 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 28661A82109E3DAC00975186 /* Reachability.m */; };
 		2892E4100DC94CBA00A64D0F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */; };
 		28AD73600D9D9599002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD735F0D9D9599002E5188 /* MainWindow.xib */; };
 		28C286E10D94DF7D0034E888 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C286E00D94DF7D0034E888 /* RootViewController.m */; };
@@ -39,16 +35,6 @@
 		1D3623250D0F684500981E51 /* EGOImageLoadingDemoAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGOImageLoadingDemoAppDelegate.m; sourceTree = "<group>"; };
 		1D6058910D05DD3D006BFB54 /* EGOImageLoadingDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EGOImageLoadingDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		2826AAA2108D426D007FBD1D /* ASIAuthenticationDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIAuthenticationDialog.h; sourceTree = "<group>"; };
-		2826AAA3108D426D007FBD1D /* ASIAuthenticationDialog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASIAuthenticationDialog.m; sourceTree = "<group>"; };
-		2826AAA4108D426D007FBD1D /* ASIHTTPRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIHTTPRequest.h; sourceTree = "<group>"; };
-		2826AAA5108D426D007FBD1D /* ASIHTTPRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASIHTTPRequest.m; sourceTree = "<group>"; };
-		2826AAA6108D426D007FBD1D /* ASIInputStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIInputStream.h; sourceTree = "<group>"; };
-		2826AAA7108D426D007FBD1D /* ASIInputStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASIInputStream.m; sourceTree = "<group>"; };
-		2826AAA8108D426D007FBD1D /* ASINetworkQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASINetworkQueue.h; sourceTree = "<group>"; };
-		2826AAA9108D426D007FBD1D /* ASINetworkQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASINetworkQueue.m; sourceTree = "<group>"; };
-		2826AAAA108D426D007FBD1D /* ASINSStringAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASINSStringAdditions.h; sourceTree = "<group>"; };
-		2826AAAB108D426D007FBD1D /* ASINSStringAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASINSStringAdditions.m; sourceTree = "<group>"; };
 		2826AB0E108D4295007FBD1D /* EGOCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGOCache.h; sourceTree = "<group>"; };
 		2826AB0F108D4295007FBD1D /* EGOCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGOCache.m; sourceTree = "<group>"; };
 		2826AB11108D4295007FBD1D /* EGOImageButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGOImageButton.h; sourceTree = "<group>"; };
@@ -57,8 +43,6 @@
 		2826AB15108D4295007FBD1D /* EGOImageLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGOImageLoader.m; sourceTree = "<group>"; };
 		2826AB17108D4295007FBD1D /* EGOImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGOImageView.h; sourceTree = "<group>"; };
 		2826AB18108D4295007FBD1D /* EGOImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGOImageView.m; sourceTree = "<group>"; };
-		2826AB56108D4416007FBD1D /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
-		2826AB57108D4416007FBD1D /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		2826AB60108D44CD007FBD1D /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		2826AB67108D44F3007FBD1D /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		2826AB6C108D4504007FBD1D /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
@@ -66,6 +50,10 @@
 		2826AB8D108D5160007FBD1D /* ExampleCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExampleCell.m; sourceTree = "<group>"; };
 		2826AB8F108D5258007FBD1D /* placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = placeholder.png; sourceTree = "<group>"; };
 		2826ABDA108D56AE007FBD1D /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
+		28661A79109E3D6800975186 /* EGOImageLoadOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGOImageLoadOperation.h; sourceTree = "<group>"; };
+		28661A7A109E3D6800975186 /* EGOImageLoadOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGOImageLoadOperation.m; sourceTree = "<group>"; };
+		28661A81109E3DAC00975186 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		28661A82109E3DAC00975186 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		28A0AAE50D9B0CCF005BE974 /* EGOImageLoadingDemo_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGOImageLoadingDemo_Prefix.pch; sourceTree = "<group>"; };
 		28AD735F0D9D9599002E5188 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
@@ -96,15 +84,14 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				2826AAA1108D426D007FBD1D /* ASIHTTPRequest */,
 				28C286DF0D94DF7D0034E888 /* RootViewController.h */,
 				28C286E00D94DF7D0034E888 /* RootViewController.m */,
 				1D3623240D0F684500981E51 /* EGOImageLoadingDemoAppDelegate.h */,
 				1D3623250D0F684500981E51 /* EGOImageLoadingDemoAppDelegate.m */,
-				2826AB56108D4416007FBD1D /* Reachability.h */,
-				2826AB57108D4416007FBD1D /* Reachability.m */,
 				2826AB8C108D5160007FBD1D /* ExampleCell.h */,
 				2826AB8D108D5160007FBD1D /* ExampleCell.m */,
+				28661A81109E3DAC00975186 /* Reachability.h */,
+				28661A82109E3DAC00975186 /* Reachability.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -116,23 +103,6 @@
 			);
 			name = Products;
 			sourceTree = "<group>";
-		};
-		2826AAA1108D426D007FBD1D /* ASIHTTPRequest */ = {
-			isa = PBXGroup;
-			children = (
-				2826AAA2108D426D007FBD1D /* ASIAuthenticationDialog.h */,
-				2826AAA3108D426D007FBD1D /* ASIAuthenticationDialog.m */,
-				2826AAA4108D426D007FBD1D /* ASIHTTPRequest.h */,
-				2826AAA5108D426D007FBD1D /* ASIHTTPRequest.m */,
-				2826AAA6108D426D007FBD1D /* ASIInputStream.h */,
-				2826AAA7108D426D007FBD1D /* ASIInputStream.m */,
-				2826AAA8108D426D007FBD1D /* ASINetworkQueue.h */,
-				2826AAA9108D426D007FBD1D /* ASINetworkQueue.m */,
-				2826AAAA108D426D007FBD1D /* ASINSStringAdditions.h */,
-				2826AAAB108D426D007FBD1D /* ASINSStringAdditions.m */,
-			);
-			path = ASIHTTPRequest;
-			sourceTree = SOURCE_ROOT;
 		};
 		2826AAB2108D4280007FBD1D /* EGOImageLoading */ = {
 			isa = PBXGroup;
@@ -170,6 +140,8 @@
 			children = (
 				2826AB14108D4295007FBD1D /* EGOImageLoader.h */,
 				2826AB15108D4295007FBD1D /* EGOImageLoader.m */,
+				28661A79109E3D6800975186 /* EGOImageLoadOperation.h */,
+				28661A7A109E3D6800975186 /* EGOImageLoadOperation.m */,
 			);
 			name = EGOImageLoader;
 			path = ../EGOImageLoader;
@@ -298,17 +270,13 @@
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				1D3623260D0F684500981E51 /* EGOImageLoadingDemoAppDelegate.m in Sources */,
 				28C286E10D94DF7D0034E888 /* RootViewController.m in Sources */,
-				2826AAAC108D426D007FBD1D /* ASIAuthenticationDialog.m in Sources */,
-				2826AAAD108D426D007FBD1D /* ASIHTTPRequest.m in Sources */,
-				2826AAAE108D426D007FBD1D /* ASIInputStream.m in Sources */,
-				2826AAAF108D426D007FBD1D /* ASINetworkQueue.m in Sources */,
-				2826AAB0108D426D007FBD1D /* ASINSStringAdditions.m in Sources */,
 				2826AB4D108D4295007FBD1D /* EGOCache.m in Sources */,
 				2826AB4E108D4295007FBD1D /* EGOImageButton.m in Sources */,
 				2826AB4F108D4295007FBD1D /* EGOImageLoader.m in Sources */,
 				2826AB50108D4295007FBD1D /* EGOImageView.m in Sources */,
-				2826AB58108D4416007FBD1D /* Reachability.m in Sources */,
 				2826AB8E108D5160007FBD1D /* ExampleCell.m in Sources */,
+				28661A7B109E3D6800975186 /* EGOImageLoadOperation.m in Sources */,
+				28661A83109E3DAC00975186 /* Reachability.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

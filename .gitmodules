@@ -1,4 +1,3 @@
 [submodule "EGOCache"]
-        path = EGOCache
-        url = git://github.com/enormego/EGOCache.git
-
+	path = EGOCache
+	url = git://github.com/enormego/EGOCache.git
