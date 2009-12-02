@@ -53,12 +53,8 @@
 #pragma mark -
 #pragma mark Image loading
 
-- (void)increaseImageLoadPriority {
-	[[EGOImageLoader sharedImageLoader] increaseImageLoadPriorityForURL:self.imageURL];
-}
-
-- (void)decreaseImageLoadPriority {
-	[[EGOImageLoader sharedImageLoader] decreaseImageLoadPriorityForURL:self.imageURL];
+- (void)cancelImageLoad {
+	[[EGOImageLoader sharedImageLoader] cancelLoadForURL:self.imageURL];
 }
 
 - (void)imageLoaderDidLoad:(NSNotification*)notification {

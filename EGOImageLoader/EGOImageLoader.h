@@ -13,25 +13,23 @@
 #import <Foundation/Foundation.h>
 
 @protocol EGOImageLoaderObserver;
-@interface EGOImageLoader : NSObject {
+@interface EGOImageLoader : NSObject/*<NSURLConnectionDelegate>*/ {
 @private
-	NSDictionary* _currentOperations;
-	NSMutableDictionary* currentOperations;
-	NSOperationQueue* operationQueue;
+	NSDictionary* _currentConnections;
+	NSMutableDictionary* currentConnections;
+	
+	NSLock* connectionsLock;
 }
 
 + (EGOImageLoader*)sharedImageLoader;
 
 - (BOOL)isLoadingImageURL:(NSURL*)aURL;
-- (void)cancelLoadForURL:(NSURL*)aURL;
 - (void)loadImageForURL:(NSURL*)aURL observer:(id<EGOImageLoaderObserver>)observer;
 - (UIImage*)imageForURL:(NSURL*)aURL shouldLoadWithObserver:(id<EGOImageLoaderObserver>)observer;
 
-- (void)increaseImageLoadPriorityForURL:(NSURL*)aURL;
-- (void)decreaseImageLoadPriorityForURL:(NSURL*)aURL;	
+- (void)cancelLoadForURL:(NSURL*)aURL;	
 
-@property(nonatomic,retain) NSDictionary* currentOperations;
-@property(nonatomic,assign,getter=isSuspended) BOOL suspended;
+@property(nonatomic,retain) NSDictionary* currentConnections;
 @end
 
 @protocol EGOImageLoaderObserver<NSObject>

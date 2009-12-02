@@ -11,9 +11,8 @@
 //
 
 #import "EGOImageLoader.h"
+#import "EGOImageLoadConnection.h"
 #import "EGOCache.h"
-#import "EGOImageLoadOperation.h"
-#import "Reachability.h"
 
 static EGOImageLoader* __imageLoader;
 
@@ -25,7 +24,7 @@ inline static NSString* keyForURL(NSURL* url) {
 #define kImageNotificationLoadFailed(s) [@"kEGOImageLoaderNotificationLoadFailed-" stringByAppendingString:keyForURL(s)]
 
 @implementation EGOImageLoader
-@synthesize currentOperations=_currentOperations;
+@synthesize currentConnections=_currentConnections;
 
 + (EGOImageLoader*)sharedImageLoader {
 	@synchronized(self) {
@@ -39,50 +38,43 @@ inline static NSString* keyForURL(NSURL* url) {
 
 - (id)init {
 	if((self = [super init])) {
-		operationQueue = [[NSOperationQueue alloc] init];
-
-		if([[Reachability sharedReachability] internetConnectionStatus] == ReachableViaWiFiNetwork) {
-			[operationQueue setMaxConcurrentOperationCount:3];
-		}
+		connectionsLock = [[NSLock alloc] init];
+		currentConnections = [[NSMutableDictionary alloc] init];
 	}
 	
 	return self;
 }
 
-- (EGOImageLoadOperation*)loadingOperationForURL:(NSURL*)aURL {
-	EGOImageLoadOperation* operation = [[self.currentOperations objectForKey:aURL] retain];
-	if(!operation) return nil;
+- (EGOImageLoadConnection*)loadingConnectionForURL:(NSURL*)aURL {
+	EGOImageLoadConnection* connection = [[self.currentConnections objectForKey:aURL] retain];
+	if(!connection) return nil;
+	else return [connection autorelease];
+}
+
+- (void)cleanUpConnection:(EGOImageLoadConnection*)connection {
+	if(!connection.imageURL) return;
 	
-	if(![operation isFinished] && ![operation isCancelled] && ![operation isExecuting]) {
-		return [operation autorelease];
-	} else {
-		[operation release];
-		return nil;
-	}
+	connection.delegate = nil;
+	
+	[connectionsLock lock];
+	[currentConnections removeObjectForKey:connection.imageURL];
+	self.currentConnections = [[currentConnections copy] autorelease];
+	[connectionsLock unlock];	
 }
 
 - (BOOL)isLoadingImageURL:(NSURL*)aURL {
-	return [self loadingOperationForURL:aURL] ? YES : NO;
+	return [self loadingConnectionForURL:aURL] ? YES : NO;
 }
 
 - (void)cancelLoadForURL:(NSURL*)aURL {
-	EGOImageLoadOperation* operation = [self loadingOperationForURL:aURL];
-	[operation cancel];
-}
-
-- (void)increaseImageLoadPriorityForURL:(NSURL*)aURL {
-	EGOImageLoadOperation* operation = [[self loadingOperationForURL:aURL] retain];
-	operation.queuePriority = NSOperationQueuePriorityHigh;
-	[operation release];
-}
-
-- (void)decreaseImageLoadPriorityForURL:(NSURL*)aURL {
-	EGOImageLoadOperation* operation = [[self loadingOperationForURL:aURL] retain];
-	operation.queuePriority = NSOperationQueuePriorityLow;
-	[operation release];
+	EGOImageLoadConnection* connection = [self loadingConnectionForURL:aURL];
+	[connection cancel];
+	[self cleanUpConnection:connection];
 }
 
 - (void)loadImageForURL:(NSURL*)aURL observer:(id<EGOImageLoaderObserver>)observer {
+	if(!aURL) return;
+	
 	if([observer respondsToSelector:@selector(imageLoaderDidLoad:)]) {
 		[[NSNotificationCenter defaultCenter] addObserver:observer selector:@selector(imageLoaderDidLoad:) name:kImageNotificationLoaded(aURL) object:self];
 	}
@@ -91,28 +83,26 @@ inline static NSString* keyForURL(NSURL* url) {
 		[[NSNotificationCenter defaultCenter] addObserver:observer selector:@selector(imageLoaderDidFailToLoad:) name:kImageNotificationLoadFailed(aURL) object:self];
 	}
 	
-	EGOImageLoadOperation* operation;
-	if((operation = [[self loadingOperationForURL:aURL] retain])) {
-		if(![operation isFinished] && ![operation isCancelled] && ![operation isExecuting]) {
-			operation.queuePriority = NSOperationQueuePriorityHigh;
-		}
-		
-		[operation release];
+	if([self loadingConnectionForURL:aURL]) {
 		return;
 	}
-		
-	operation = [[EGOImageLoadOperation alloc] initWithImageURL:aURL];
-	operation.queuePriority = NSOperationQueuePriorityHigh;
-	operation.timeoutInterval = 30.0;
-	operation.delegate = (id<EGOImageLoadOperationDelegate>)self;
-	[operationQueue addOperation:operation];
-	[currentOperations setObject:operation forKey:operation.imageURL];
-	self.currentOperations = [[currentOperations copy] autorelease];
+	
+	EGOImageLoadConnection* connection = [[EGOImageLoadConnection alloc] initWithImageURL:aURL delegate:self];
+
+	[connectionsLock lock];
+	[currentConnections setObject:connection forKey:aURL];
+	self.currentConnections = [[currentConnections copy] autorelease];
+	[connectionsLock unlock];
+
+	[connection start];
+	[connection release];
 }
 
 - (UIImage*)imageForURL:(NSURL*)aURL shouldLoadWithObserver:(id<EGOImageLoaderObserver>)observer {
+	if(!aURL) return nil;
+	
 	UIImage* anImage = [[EGOCache currentCache] imageForKey:keyForURL(aURL)];
-
+	
 	if(anImage) {
 		return anImage;
 	} else {
@@ -122,60 +112,53 @@ inline static NSString* keyForURL(NSURL* url) {
 }
 
 #pragma mark -
-#pragma mark Request methods
-- (void)imageLoadOperation:(EGOImageLoadOperation*)operation didFinishWithData:(NSData*)imageData {
-	UIImage* anImage = [UIImage imageWithData:imageData];
+#pragma mark URL Connection delegate methods
+
+- (void)connectionDidFinishLoading:(EGOImageLoadConnection *)connection {
+	UIImage* anImage = [UIImage imageWithData:connection.responseData];
 	
 	if(!anImage) {
-		NSError* error = [NSError errorWithDomain:[operation.imageURL host] code:406 userInfo:nil];
-		NSNotification* notification = [NSNotification notificationWithName:kImageNotificationLoadFailed(operation.imageURL)
+		NSError* error = [NSError errorWithDomain:[connection.imageURL host] code:406 userInfo:nil];
+		NSNotification* notification = [NSNotification notificationWithName:kImageNotificationLoadFailed(connection.imageURL)
 																	 object:self
-																   userInfo:[NSDictionary dictionaryWithObjectsAndKeys:error,@"error",operation.imageURL,@"imageURL",nil]];
+																   userInfo:[NSDictionary dictionaryWithObjectsAndKeys:error,@"error",connection.imageURL,@"imageURL",nil]];
 		
 		[[NSNotificationCenter defaultCenter] performSelectorOnMainThread:@selector(postNotification:) withObject:notification waitUntilDone:YES];
-		return;
+	} else {
+		[[EGOCache currentCache] setData:connection.responseData forKey:keyForURL(connection.imageURL) withTimeoutInterval:604800];
+		
+		[currentConnections removeObjectForKey:connection.imageURL];
+		self.currentConnections = [[currentConnections copy] autorelease];
+		
+		NSNotification* notification = [NSNotification notificationWithName:kImageNotificationLoaded(connection.imageURL)
+																	 object:self
+																   userInfo:[NSDictionary dictionaryWithObjectsAndKeys:anImage,@"image",connection.imageURL,@"imageURL",nil]];
+		
+		[[NSNotificationCenter defaultCenter] performSelectorOnMainThread:@selector(postNotification:) withObject:notification waitUntilDone:YES];
 	}
+
+	[self cleanUpConnection:connection];
+}
+
+- (void)connection:(EGOImageLoadConnection *)connection didFailWithError:(NSError *)error {
+	[currentConnections removeObjectForKey:connection.imageURL];
+	self.currentConnections = [[currentConnections copy] autorelease];
 	
-	[[EGOCache currentCache] setData:imageData forKey:keyForURL(operation.imageURL) withTimeoutInterval:604800];
-	
-	[currentOperations removeObjectForKey:operation.imageURL];
-	self.currentOperations = [[currentOperations copy] autorelease];
-	
-	NSNotification* notification = [NSNotification notificationWithName:kImageNotificationLoaded(operation.imageURL)
+	NSNotification* notification = [NSNotification notificationWithName:kImageNotificationLoadFailed(connection.imageURL)
 																 object:self
-															   userInfo:[NSDictionary dictionaryWithObjectsAndKeys:anImage,@"image",operation.imageURL,@"imageURL",nil]];
+															   userInfo:[NSDictionary dictionaryWithObjectsAndKeys:error,@"error",connection.imageURL,@"imageURL",nil]];
 	
 	[[NSNotificationCenter defaultCenter] performSelectorOnMainThread:@selector(postNotification:) withObject:notification waitUntilDone:YES];
-}
 
-- (void)imageLoadOperationDidFail:(EGOImageLoadOperation*)operation {
-	[currentOperations removeObjectForKey:operation.imageURL];
-	self.currentOperations = [[currentOperations copy] autorelease];
-
-	NSError* error = [NSError errorWithDomain:[operation.imageURL host] code:406 userInfo:nil];
-	NSNotification* notification = [NSNotification notificationWithName:kImageNotificationLoadFailed(operation.imageURL)
-																 object:self
-															   userInfo:[NSDictionary dictionaryWithObjectsAndKeys:error,@"error",operation.imageURL,@"imageURL",nil]];
-	
-	[[NSNotificationCenter defaultCenter] performSelectorOnMainThread:@selector(postNotification:) withObject:notification waitUntilDone:YES];
-}
-
-#pragma mark -
-
-- (BOOL)isSuspended {
-	return [operationQueue isSuspended];	
-}
-
-- (void)setSuspended:(BOOL)isSuspended {
-	[operationQueue setSuspended:isSuspended];
+	[self cleanUpConnection:connection];
 }
 
 #pragma mark -
 
 - (void)dealloc {
-	self.currentOperations = nil;
-	[currentOperations release];
-	[operationQueue release];
+	self.currentConnections = nil;
+	[currentConnections release];
+	[connectionsLock release];
 	[super dealloc];
 }
 

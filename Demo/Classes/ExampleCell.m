@@ -29,7 +29,7 @@
 	[super willMoveToSuperview:newSuperview];
 	
 	if(!newSuperview) {
-		[imageView decreaseImageLoadPriority];
+		[imageView cancelImageLoad];
 	}
 }
 - (void)dealloc {

@@ -21,10 +21,10 @@
 		2826AB8E108D5160007FBD1D /* ExampleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2826AB8D108D5160007FBD1D /* ExampleCell.m */; };
 		2826AB90108D5258007FBD1D /* placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 2826AB8F108D5258007FBD1D /* placeholder.png */; };
 		2826ABDB108D56AE007FBD1D /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 2826ABDA108D56AE007FBD1D /* icon.png */; };
-		28661A7B109E3D6800975186 /* EGOImageLoadOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 28661A7A109E3D6800975186 /* EGOImageLoadOperation.m */; };
 		28661A83109E3DAC00975186 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 28661A82109E3DAC00975186 /* Reachability.m */; };
 		2892E4100DC94CBA00A64D0F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */; };
 		28AD73600D9D9599002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD735F0D9D9599002E5188 /* MainWindow.xib */; };
+		28BBA36B10C62E3300081AB5 /* EGOImageLoadConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 28BBA36A10C62E3300081AB5 /* EGOImageLoadConnection.m */; };
 		28C286E10D94DF7D0034E888 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C286E00D94DF7D0034E888 /* RootViewController.m */; };
 		28F335F11007B36200424DE2 /* RootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28F335F01007B36200424DE2 /* RootViewController.xib */; };
 /* End PBXBuildFile section */
@@ -50,13 +50,13 @@
 		2826AB8D108D5160007FBD1D /* ExampleCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExampleCell.m; sourceTree = "<group>"; };
 		2826AB8F108D5258007FBD1D /* placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = placeholder.png; sourceTree = "<group>"; };
 		2826ABDA108D56AE007FBD1D /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
-		28661A79109E3D6800975186 /* EGOImageLoadOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGOImageLoadOperation.h; sourceTree = "<group>"; };
-		28661A7A109E3D6800975186 /* EGOImageLoadOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGOImageLoadOperation.m; sourceTree = "<group>"; };
 		28661A81109E3DAC00975186 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		28661A82109E3DAC00975186 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		28A0AAE50D9B0CCF005BE974 /* EGOImageLoadingDemo_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGOImageLoadingDemo_Prefix.pch; sourceTree = "<group>"; };
 		28AD735F0D9D9599002E5188 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
+		28BBA36910C62E3300081AB5 /* EGOImageLoadConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGOImageLoadConnection.h; sourceTree = "<group>"; };
+		28BBA36A10C62E3300081AB5 /* EGOImageLoadConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGOImageLoadConnection.m; sourceTree = "<group>"; };
 		28C286DF0D94DF7D0034E888 /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
 		28C286E00D94DF7D0034E888 /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
 		28F335F01007B36200424DE2 /* RootViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RootViewController.xib; sourceTree = "<group>"; };
@@ -140,8 +140,8 @@
 			children = (
 				2826AB14108D4295007FBD1D /* EGOImageLoader.h */,
 				2826AB15108D4295007FBD1D /* EGOImageLoader.m */,
-				28661A79109E3D6800975186 /* EGOImageLoadOperation.h */,
-				28661A7A109E3D6800975186 /* EGOImageLoadOperation.m */,
+				28BBA36910C62E3300081AB5 /* EGOImageLoadConnection.h */,
+				28BBA36A10C62E3300081AB5 /* EGOImageLoadConnection.m */,
 			);
 			name = EGOImageLoader;
 			path = ../EGOImageLoader;
@@ -275,8 +275,8 @@
 				2826AB4F108D4295007FBD1D /* EGOImageLoader.m in Sources */,
 				2826AB50108D4295007FBD1D /* EGOImageView.m in Sources */,
 				2826AB8E108D5160007FBD1D /* ExampleCell.m in Sources */,
-				28661A7B109E3D6800975186 /* EGOImageLoadOperation.m in Sources */,
 				28661A83109E3DAC00975186 /* Reachability.m in Sources */,
+				28BBA36B10C62E3300081AB5 /* EGOImageLoadConnection.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

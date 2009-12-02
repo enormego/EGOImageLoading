@@ -24,8 +24,7 @@
 - (id)initWithPlaceholderImage:(UIImage*)anImage; // delegate:nil
 - (id)initWithPlaceholderImage:(UIImage*)anImage delegate:(id<EGOImageButtonDelegate>)aDelegate;
 
-- (void)increaseImageLoadPriority;
-- (void)decreaseImageLoadPriority;
+- (void)cancelImageLoad;
 
 @property(nonatomic,retain) NSURL* imageURL;
 @property(nonatomic,retain) UIImage* placeholderImage;
