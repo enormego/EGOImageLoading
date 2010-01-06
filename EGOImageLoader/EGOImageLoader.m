@@ -111,6 +111,19 @@ inline static NSString* keyForURL(NSURL* url) {
 	}
 }
 
+- (BOOL)hasLoadedImageURL:(NSURL*)aURL {
+	return [[EGOCache currentCache] hasCacheForKey:keyForURL(aURL)];
+}
+
+- (void)removeObserver:(id<EGOImageLoaderObserver>)observer {
+	[[NSNotificationCenter defaultCenter] removeObserver:observer name:nil object:self];
+}
+
+- (void)removeObserver:(id<EGOImageLoaderObserver>)observer forURL:(NSURL*)aURL {
+	[[NSNotificationCenter defaultCenter] removeObserver:observer name:kImageNotificationLoaded(aURL) object:self];
+	[[NSNotificationCenter defaultCenter] removeObserver:observer name:kImageNotificationLoadFailed(aURL) object:self];
+}
+
 #pragma mark -
 #pragma mark URL Connection delegate methods
 

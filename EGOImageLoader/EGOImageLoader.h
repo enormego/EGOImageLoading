@@ -26,8 +26,12 @@
 - (BOOL)isLoadingImageURL:(NSURL*)aURL;
 - (void)loadImageForURL:(NSURL*)aURL observer:(id<EGOImageLoaderObserver>)observer;
 - (UIImage*)imageForURL:(NSURL*)aURL shouldLoadWithObserver:(id<EGOImageLoaderObserver>)observer;
+- (BOOL)hasLoadedImageURL:(NSURL*)aURL;
 
-- (void)cancelLoadForURL:(NSURL*)aURL;	
+- (void)cancelLoadForURL:(NSURL*)aURL;
+
+- (void)removeObserver:(id<EGOImageLoaderObserver>)observer;
+- (void)removeObserver:(id<EGOImageLoaderObserver>)observer forURL:(NSURL*)aURL;
 
 @property(nonatomic,retain) NSDictionary* currentConnections;
 @end

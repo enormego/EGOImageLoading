@@ -31,7 +31,11 @@
 }
 
 - (void)setImageURL:(NSURL *)aURL {
-	[imageURL release];
+	if(imageURL) {
+		[[EGOImageLoader sharedImageLoader] removeObserver:self forURL:imageURL];
+		[imageURL release];
+		imageURL = nil;
+	}
 	
 	if(!aURL) {
 		[self setImage:self.placeholderImage forState:UIControlStateNormal];
@@ -41,7 +45,6 @@
 		imageURL = [aURL retain];
 	}
 	
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	UIImage* anImage = [[EGOImageLoader sharedImageLoader] imageForURL:aURL shouldLoadWithObserver:self];
 	
 	if(anImage) {
@@ -56,6 +59,7 @@
 
 - (void)cancelImageLoad {
 	[[EGOImageLoader sharedImageLoader] cancelLoadForURL:self.imageURL];
+	[[EGOImageLoader sharedImageLoader] removeObserver:self forURL:self.imageURL];
 }
 
 - (void)imageLoaderDidLoad:(NSNotification*)notification {
@@ -80,7 +84,8 @@
 
 #pragma mark -
 - (void)dealloc {
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[[EGOImageLoader sharedImageLoader] removeObserver:self];
+	
 	self.imageURL = nil;
 	self.placeholderImage = nil;
     [super dealloc];
