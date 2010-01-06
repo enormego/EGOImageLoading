@@ -3,7 +3,7 @@
 //  EGOImageLoading
 //
 //  Created by Shaun Harrison on 9/15/09.
-//  Copyright 2009 enormego. All rights reserved.
+//  Copyright 2009-2010 enormego. All rights reserved.
 //
 //  This work is licensed under the Creative Commons GNU General Public License License.
 //  To view a copy of this license, visit http://creativecommons.org/licenses/GPL/2.0/

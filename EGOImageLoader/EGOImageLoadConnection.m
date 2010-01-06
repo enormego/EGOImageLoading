@@ -3,7 +3,7 @@
 //  EGOImageLoading
 //
 //  Created by Shaun Harrison on 12/1/09.
-//  Copyright 2009 enormego. All rights reserved.
+//  Copyright 2009-2010 enormego. All rights reserved.
 //
 //  This work is licensed under the Creative Commons GNU General Public License License.
 //  To view a copy of this license, visit http://creativecommons.org/licenses/GPL/2.0/
@@ -32,14 +32,11 @@
 																cachePolicy:NSURLRequestReturnCacheDataElseLoad
 															timeoutInterval:self.timeoutInterval];
 	[request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];  
-	
 	_connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:YES];
-	NSLog(@"Starting: %@", _connection);
 	[request release];
 }
 
 - (void)cancel {
-	NSLog(@"Cancelling: %@", _connection);
 	[_connection cancel];	
 }
 
@@ -59,17 +56,17 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
 	if(connection != _connection) return;
-	NSLog(@"%@", NSStringFromSelector(_cmd));
-	if([self.delegate respondsToSelector:_cmd]) {
-		[self.delegate connectionDidFinishLoading:self];
+
+	if([self.delegate respondsToSelector:@selector(imageLoadConnectionDidFinishLoading:)]) {
+		[self.delegate imageLoadConnectionDidFinishLoading:self];
 	}
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
 	if(connection != _connection) return;
-	NSLog(@"%@", NSStringFromSelector(_cmd));
-	if([self.delegate respondsToSelector:_cmd]) {
-		[self.delegate connection:self didFailWithError:error];
+
+	if([self.delegate respondsToSelector:@selector(imageLoadConnection:didFailWithError:)]) {
+		[self.delegate imageLoadConnection:self didFailWithError:error];
 	}
 }
 

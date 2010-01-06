@@ -3,7 +3,7 @@
 //  EGOImageLoading
 //
 //  Created by Shaun Harrison on 9/15/09.
-//  Copyright 2009 enormego. All rights reserved.
+//  Copyright 2009-2010 enormego. All rights reserved.
 //
 //  This work is licensed under the Creative Commons GNU General Public License License.
 //  To view a copy of this license, visit http://creativecommons.org/licenses/GPL/2.0/
@@ -68,6 +68,7 @@ inline static NSString* keyForURL(NSURL* url) {
 
 - (void)cancelLoadForURL:(NSURL*)aURL {
 	EGOImageLoadConnection* connection = [self loadingConnectionForURL:aURL];
+	[NSObject cancelPreviousPerformRequestsWithTarget:connection selector:@selector(start) object:nil];
 	[connection cancel];
 	[self cleanUpConnection:connection];
 }
@@ -93,8 +94,7 @@ inline static NSString* keyForURL(NSURL* url) {
 	[currentConnections setObject:connection forKey:aURL];
 	self.currentConnections = [[currentConnections copy] autorelease];
 	[connectionsLock unlock];
-
-	[connection start];
+	[connection performSelector:@selector(start) withObject:nil afterDelay:0.01];
 	[connection release];
 }
 
@@ -127,7 +127,7 @@ inline static NSString* keyForURL(NSURL* url) {
 #pragma mark -
 #pragma mark URL Connection delegate methods
 
-- (void)connectionDidFinishLoading:(EGOImageLoadConnection *)connection {
+- (void)imageLoadConnectionDidFinishLoading:(EGOImageLoadConnection *)connection {
 	UIImage* anImage = [UIImage imageWithData:connection.responseData];
 	
 	if(!anImage) {
@@ -153,7 +153,7 @@ inline static NSString* keyForURL(NSURL* url) {
 	[self cleanUpConnection:connection];
 }
 
-- (void)connection:(EGOImageLoadConnection *)connection didFailWithError:(NSError *)error {
+- (void)imageLoadConnection:(EGOImageLoadConnection *)connection didFailWithError:(NSError *)error {
 	[currentConnections removeObjectForKey:connection.imageURL];
 	self.currentConnections = [[currentConnections copy] autorelease];
 	
