@@ -103,6 +103,7 @@
 
 	[_connection release];
 	[_imageURL release];
+  [_responseData release];
 	[super dealloc];
 }
 
