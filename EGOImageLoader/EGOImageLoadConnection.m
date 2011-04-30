@@ -30,12 +30,20 @@
 @implementation EGOImageLoadConnection
 @synthesize imageURL=_imageURL, response=_response, delegate=_delegate, timeoutInterval=_timeoutInterval;
 
+#if __EGOIL_USE_BLOCKS
+@synthesize handlers;
+#endif
+
 - (id)initWithImageURL:(NSURL*)aURL delegate:(id)delegate {
 	if((self = [super init])) {
 		_imageURL = [aURL retain];
 		self.delegate = delegate;
 		_responseData = [[NSMutableData alloc] init];
 		self.timeoutInterval = 30;
+		
+		#if __EGOIL_USE_BLOCKS
+		handlers = [[NSMutableDictionary alloc] init];
+		#endif
 	}
 	
 	return self;
@@ -88,6 +96,11 @@
 - (void)dealloc {
 	self.response = nil;
 	self.delegate = nil;
+	
+	#if __EGOIL_USE_BLOCKS
+	[handlers release], handlers = nil;
+	#endif
+
 	[_connection release];
 	[_imageURL release];
 	[super dealloc];
