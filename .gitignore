@@ -2,3 +2,5 @@ build
 *.mode1v3
 *.pbxuser
 *.DS_Store
+*.xcworkspace
+xcuserdata

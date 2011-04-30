@@ -8,11 +8,12 @@
 
 #import "ExampleCell.h"
 #import "EGOImageView.h"
+#import <QuartzCore/QuartzCore.h>
 
 @implementation ExampleCell
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
-    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+    if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) {
 		imageView = [[EGOImageView alloc] initWithPlaceholderImage:[UIImage imageNamed:@"placeholder.png"]];
 		imageView.frame = CGRectMake(4.0f, 4.0f, 36.0f, 36.0f);
 		[self.contentView addSubview:imageView];
@@ -32,6 +33,7 @@
 		[imageView cancelImageLoad];
 	}
 }
+
 - (void)dealloc {
 	[imageView release];
     [super dealloc];

@@ -48,7 +48,7 @@ inline static NSString* keyForURL(NSURL* url, NSString* style) {
 #endif
 
 @interface EGOImageLoader ()
-#if __EGOIL_USE_NOTIF
+#if __EGOIL_USE_BLOCKS
 - (void)handleCompletionsForConnection:(EGOImageLoadConnection*)connection image:(UIImage*)image error:(NSError*)error;
 #endif
 @end
@@ -281,7 +281,7 @@ inline static NSString* keyForURL(NSURL* url, NSString* style) {
 	[self cleanUpConnection:connection];
 }
 
-#if __EGOIL_USE_NOTIF
+#if __EGOIL_USE_BLOCKS
 - (void)handleCompletionsForConnection:(EGOImageLoadConnection*)connection image:(UIImage*)image error:(NSError*)error {
 	if([connection.handlers count] == 0) return;
 
@@ -299,7 +299,7 @@ inline static NSString* keyForURL(NSURL* url, NSString* style) {
 		NSDictionary* handler = [connection.handlers objectForKey:styleKey];
 		UIImage* (^styler)(UIImage* image) = [handler objectForKey:kStylerKey];
 		if(!error && image && styler) {
-            dispatch_async(dispatch_get_main_queue(), ^{
+			dispatch_async(dispatch_get_main_queue(), ^{
 				UIImage* anImage = styler(image);
 				[[EGOCache currentCache] setImage:anImage forKey:keyForURL(imageURL, styleKey) withTimeoutInterval:604800];
 				callCompletions(anImage, [handler objectForKey:kCompletionsKey]);
