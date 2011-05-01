@@ -39,7 +39,10 @@
 @private
 	NSDictionary* _currentConnections;
 	NSMutableDictionary* currentConnections;
-	
+	#if __EGOIL_USE_BLOCKS
+	dispatch_queue_t _operationQueue;
+	#endif
+
 	NSLock* connectionsLock;
 }
 
