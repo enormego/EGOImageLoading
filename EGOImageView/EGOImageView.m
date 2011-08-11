@@ -63,6 +63,11 @@
 	
 	if(anImage) {
 		self.image = anImage;
+
+		// trigger the delegate callback if the image was found in the cache
+		if([self.delegate respondsToSelector:@selector(imageViewLoadedImage:)]) {
+			[self.delegate imageViewLoadedImage:self];
+		}
 	} else {
 		self.image = self.placeholderImage;
 	}
