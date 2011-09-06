@@ -33,9 +33,9 @@ static EGOImageLoader* __imageLoader;
 
 inline static NSString* keyForURL(NSURL* url, NSString* style) {
 	if(style) {
-		return [NSString stringWithFormat:@"EGOImageLoader-%u-%u", [[url description] md5Hash], [style md5Hash]];
+		return [NSString stringWithFormat:@"EGOImageLoader-%@-%@", [[url description] md5Hash], [style md5Hash]];
 	} else {
-		return [NSString stringWithFormat:@"EGOImageLoader-%u", [[url description] md5Hash]];
+		return [NSString stringWithFormat:@"EGOImageLoader-%@", [[url description] md5Hash]];
 	}
 }
 
