@@ -32,6 +32,7 @@
 @private
 	NSURL* imageURL;
 	UIImage* placeholderImage;
+    UIActivityIndicatorView *activityIndicator;
 	id<EGOImageViewDelegate> delegate;
 }
 
@@ -42,6 +43,7 @@
 
 @property(nonatomic,retain) NSURL* imageURL;
 @property(nonatomic,retain) UIImage* placeholderImage;
+@property(nonatomic,readonly) UIActivityIndicatorView* activityIndicator;
 @property(nonatomic,assign) id<EGOImageViewDelegate> delegate;
 @end
 
