@@ -54,7 +54,12 @@
 																cachePolicy:NSURLRequestReturnCacheDataElseLoad
 															timeoutInterval:self.timeoutInterval];
 	[request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];  
-	_connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:YES];
+	_connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO];
+    [_connection scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
+    [_connection start];
+    
+    NSLog(@"%@", request);
+    
 	[request release];
 }
 
