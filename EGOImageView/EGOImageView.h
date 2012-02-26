@@ -43,6 +43,8 @@
 @property(nonatomic,retain) NSURL* imageURL;
 @property(nonatomic,retain) UIImage* placeholderImage;
 @property(nonatomic,assign) IBOutlet id<EGOImageViewDelegate> delegate;
+@property(nonatomic, readonly) BOOL loadedFromCache;
+
 @end
 
 @protocol EGOImageViewDelegate<NSObject>
