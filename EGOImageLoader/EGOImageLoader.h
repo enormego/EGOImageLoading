@@ -34,6 +34,12 @@
 #define __EGOIL_USE_NOTIF 1
 #endif
 
+#ifdef __has_feature
+#define EGO_NO_ARC !__has_feature(objc_arc)
+#else
+#define EGO_NO_ARC 1
+#endif
+
 @protocol EGOImageLoaderObserver;
 @interface EGOImageLoader : NSObject/*<NSURLConnectionDelegate>*/ {
 @private
@@ -69,7 +75,11 @@
 - (void)clearCacheForURL:(NSURL*)aURL;
 - (void)clearCacheForURL:(NSURL*)aURL style:(NSString*)style;
 
+#if EGO_NO_ARC
 @property(nonatomic,retain) NSDictionary* currentConnections;
+#else
+@property(nonatomic,strong) NSDictionary* currentConnections;
+#endif
 @end
 
 @protocol EGOImageLoaderObserver<NSObject>

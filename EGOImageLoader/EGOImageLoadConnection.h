@@ -36,7 +36,11 @@
 	NSURLConnection* _connection;
 	NSTimeInterval _timeoutInterval;
 	
+#if EGO_NO_ARC
 	id<EGOImageLoadConnectionDelegate> _delegate;
+#else
+    __unsafe_unretained id<EGOImageLoadConnectionDelegate> _delegate;
+#endif
 }
 
 - (id)initWithImageURL:(NSURL*)aURL delegate:(id)delegate;
@@ -47,8 +51,13 @@
 @property(nonatomic,readonly) NSData* responseData;
 @property(nonatomic,readonly,getter=imageURL) NSURL* imageURL;
 
+#if EGO_NO_ARC
 @property(nonatomic,retain) NSURLResponse* response;
 @property(nonatomic,assign) id<EGOImageLoadConnectionDelegate> delegate;
+#else
+@property(nonatomic,strong) NSURLResponse* response;
+@property(nonatomic,unsafe_unretained) id<EGOImageLoadConnectionDelegate> delegate;
+#endif
 
 @property(nonatomic,assign) NSTimeInterval timeoutInterval; // Default is 30 seconds
 
