@@ -59,6 +59,7 @@ inline static NSString* keyForURL(NSURL* url, NSString* style) {
 
 @implementation EGOImageLoader
 @synthesize currentConnections=_currentConnections;
+@synthesize username=_username, password=_password;
 
 + (EGOImageLoader*)sharedImageLoader {
 	@synchronized(self) {
@@ -128,6 +129,9 @@ inline static NSString* keyForURL(NSURL* url, NSString* style) {
 		return connection;
 	} else {
 		connection = [[EGOImageLoadConnection alloc] initWithImageURL:aURL delegate:self];
+        
+        connection.username = self.username;
+        connection.password = self.password;
 	
 		[connectionsLock lock];
 		[currentConnections setObject:connection forKey:aURL];

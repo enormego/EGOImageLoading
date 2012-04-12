@@ -47,6 +47,8 @@
 @property(nonatomic,readonly) NSData* responseData;
 @property(nonatomic,readonly,getter=imageURL) NSURL* imageURL;
 
+@property(nonatomic,retain) NSString *username;
+@property(nonatomic,retain) NSString *password;
 @property(nonatomic,retain) NSURLResponse* response;
 @property(nonatomic,assign) id<EGOImageLoadConnectionDelegate> delegate;
 
