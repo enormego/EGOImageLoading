@@ -29,6 +29,7 @@
 
 @implementation EGOImageLoadConnection
 @synthesize imageURL=_imageURL, response=_response, delegate=_delegate, timeoutInterval=_timeoutInterval;
+@synthesize username=_username, password=_password;
 
 #if __EGOIL_USE_BLOCKS
 @synthesize handlers;
@@ -90,6 +91,28 @@
 	if([self.delegate respondsToSelector:@selector(imageLoadConnection:didFailWithError:)]) {
 		[self.delegate imageLoadConnection:self didFailWithError:error];
 	}
+}
+
+- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space {
+    if([[space authenticationMethod] isEqualToString:NSURLAuthenticationMethodHTTPBasic]) {
+        return self.username || self.password;
+    }
+    return NO;
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
+    if ([challenge previousFailureCount] == 0) {
+        NSURLCredential *newCredential = [NSURLCredential credentialWithUser:self.username
+                                                                    password:self.password
+                                                                 persistence:NSURLCredentialPersistenceNone];
+        [[challenge sender] useCredential:newCredential forAuthenticationChallenge:challenge];
+    }
+    else {
+#ifdef DEBUG
+	    NSLog(@"Failed authentication challenge after %ld failures", (long) [challenge previousFailureCount]);
+#endif
+        [[challenge sender] cancelAuthenticationChallenge:challenge];
+    }
 }
 
 
