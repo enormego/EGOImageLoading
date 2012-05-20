@@ -24,6 +24,7 @@
 		28BBA36B10C62E3300081AB5 /* EGOImageLoadConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 28BBA36A10C62E3300081AB5 /* EGOImageLoadConnection.m */; };
 		28C286E10D94DF7D0034E888 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C286E00D94DF7D0034E888 /* RootViewController.m */; };
 		28F335F11007B36200424DE2 /* RootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28F335F01007B36200424DE2 /* RootViewController.xib */; };
+		66FE1FE81416232400D3295C /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 66FE1FE71416232400D3295C /* NSString+MD5.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +55,8 @@
 		28C286E00D94DF7D0034E888 /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
 		28F335F01007B36200424DE2 /* RootViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RootViewController.xib; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		66FE1FE61416232400D3295C /* NSString+MD5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MD5.h"; sourceTree = "<group>"; };
+		66FE1FE71416232400D3295C /* NSString+MD5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MD5.m"; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* EGOImageLoadingDemo-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "EGOImageLoadingDemo-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -131,6 +134,8 @@
 				2826AB15108D4295007FBD1D /* EGOImageLoader.m */,
 				28BBA36910C62E3300081AB5 /* EGOImageLoadConnection.h */,
 				28BBA36A10C62E3300081AB5 /* EGOImageLoadConnection.m */,
+				66FE1FE61416232400D3295C /* NSString+MD5.h */,
+				66FE1FE71416232400D3295C /* NSString+MD5.m */,
 			);
 			name = EGOImageLoader;
 			path = ../EGOImageLoader;
@@ -264,6 +269,7 @@
 				2826AB50108D4295007FBD1D /* EGOImageView.m in Sources */,
 				2826AB8E108D5160007FBD1D /* ExampleCell.m in Sources */,
 				28BBA36B10C62E3300081AB5 /* EGOImageLoadConnection.m in Sources */,
+				66FE1FE81416232400D3295C /* NSString+MD5.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
