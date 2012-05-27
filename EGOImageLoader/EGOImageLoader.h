@@ -61,6 +61,7 @@
 #if __EGOIL_USE_BLOCKS
 - (void)loadImageForURL:(NSURL*)aURL completion:(void (^)(UIImage* image, NSURL* imageURL, NSError* error))completion;
 - (void)loadImageForURL:(NSURL*)aURL style:(NSString*)style styler:(UIImage* (^)(UIImage* image))styler completion:(void (^)(UIImage* image, NSURL* imageURL, NSError* error))completion;
+- (void)loadImagesForURLs:(NSSet*)someUrls completion:(void (^)(void))completion;
 #endif
 
 - (BOOL)hasLoadedImageURL:(NSURL*)aURL;

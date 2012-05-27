@@ -222,6 +222,20 @@ inline static NSString* keyForURL(NSURL* url, NSString* style) {
 		[completionCopy release];
 	}
 }
+
+- (void)loadImagesForURLs:(NSSet*)someUrls completion:(void (^)(void))completion {
+    if (!someUrls || someUrls.count == 0)
+        completion();
+    else {        
+        NSMutableSet *urlsToDownload = [NSMutableSet setWithSet:someUrls];
+        for (NSURL *url in someUrls)
+            [self loadImageForURL:url completion:^(UIImage *image, NSURL *imageURL, NSError *error) {
+                [urlsToDownload removeObject:imageURL];
+                if (urlsToDownload.count == 0)
+                    completion();
+            }];
+    }
+}
 #endif
 
 - (BOOL)hasLoadedImageURL:(NSURL*)aURL {
