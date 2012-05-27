@@ -86,9 +86,18 @@ inline static NSString* keyForURL(NSURL* url, NSString* style) {
 }
 
 - (EGOImageLoadConnection*)loadingConnectionForURL:(NSURL*)aURL {
+#if EGO_NO_ARC
 	EGOImageLoadConnection* connection = [[self.currentConnections objectForKey:aURL] retain];
+#else
+    EGOImageLoadConnection* connection = [self.currentConnections objectForKey:aURL];
+#endif
 	if(!connection) return nil;
-	else return [connection autorelease];
+    else {
+#if EGO_NO_ARC
+        [connection autorelease];
+#endif
+        return connection;
+    }
 }
 
 - (void)cleanUpConnection:(EGOImageLoadConnection*)connection {
@@ -98,7 +107,10 @@ inline static NSString* keyForURL(NSURL* url, NSString* style) {
 	
 	[connectionsLock lock];
 	[currentConnections removeObjectForKey:connection.imageURL];
-	self.currentConnections = [[currentConnections copy] autorelease];
+    self.currentConnections = [currentConnections copy];
+#if EGO_NO_ARC
+	[self.currentConnections autorelease];
+#endif
 	[connectionsLock unlock];	
 }
 
@@ -131,10 +143,15 @@ inline static NSString* keyForURL(NSURL* url, NSString* style) {
 	
 		[connectionsLock lock];
 		[currentConnections setObject:connection forKey:aURL];
-		self.currentConnections = [[currentConnections copy] autorelease];
+        self.currentConnections = [currentConnections copy];
+#if EGO_NO_ARC
+		[self.currentConnections autorelease]; 
+#endif
 		[connectionsLock unlock];
 		[connection performSelector:@selector(start) withObject:nil afterDelay:0.01];
+#if EGO_NO_ARC
 		[connection release];
+#endif
 		
 		return connection;
 	}
@@ -212,14 +229,20 @@ inline static NSString* keyForURL(NSURL* url, NSString* style) {
 			if(styler) {
 				UIImage* (^stylerCopy)(UIImage* image) = [styler copy];
 				[handler setObject:stylerCopy forKey:kStylerKey];
+#if EGO_NO_ARC
 				[stylerCopy release];
+#endif
 			}
 			
+#if EGO_NO_ARC
 			[handler release];
+#endif
 		}
 		
 		[[handler objectForKey:kCompletionsKey] addObject:completionCopy];
+#if EGO_NO_ARC
 		[completionCopy release];
+#endif
 	}
 }
 #endif
@@ -252,7 +275,10 @@ inline static NSString* keyForURL(NSURL* url, NSString* style) {
 		[[EGOCache currentCache] setData:connection.responseData forKey:keyForURL(connection.imageURL,nil) withTimeoutInterval:604800];
 		
 		[currentConnections removeObjectForKey:connection.imageURL];
-		self.currentConnections = [[currentConnections copy] autorelease];
+        self.currentConnections = [currentConnections copy];
+#if EGO_NO_ARC
+		[self.currentConnections autorelease];
+#endif
 		
 		#if __EGOIL_USE_NOTIF
 		NSNotification* notification = [NSNotification notificationWithName:kImageNotificationLoaded(connection.imageURL)
@@ -274,7 +300,10 @@ inline static NSString* keyForURL(NSURL* url, NSString* style) {
 
 - (void)imageLoadConnection:(EGOImageLoadConnection *)connection didFailWithError:(NSError *)error {
 	[currentConnections removeObjectForKey:connection.imageURL];
-	self.currentConnections = [[currentConnections copy] autorelease];
+    self.currentConnections = [currentConnections copy];
+#if EGO_NO_ARC
+	[self.currentConnections autorelease];
+#endif
 	
 	#if __EGOIL_USE_NOTIF
 	NSNotification* notification = [NSNotification notificationWithName:kImageNotificationLoadFailed(connection.imageURL)
@@ -329,9 +358,15 @@ inline static NSString* keyForURL(NSURL* url, NSString* style) {
 	#endif
 	
 	self.currentConnections = nil;
-	[currentConnections release], currentConnections = nil;
-	[connectionsLock release], connectionsLock = nil;
+#if EGO_NO_ARC
+	[currentConnections release];
+	[connectionsLock release];
+#endif
+    currentConnections = nil;
+    connectionsLock = nil;
+#if EGO_NO_ARC
 	[super dealloc];
+#endif
 }
 
 @end

@@ -36,7 +36,11 @@
 
 - (id)initWithImageURL:(NSURL*)aURL delegate:(id)delegate {
 	if((self = [super init])) {
+#if EGO_NO_ARC
 		_imageURL = [aURL retain];
+#else
+        _imageURL = aURL;
+#endif
 		self.delegate = delegate;
 		_responseData = [[NSMutableData alloc] init];
 		self.timeoutInterval = 30;
@@ -55,7 +59,9 @@
 															timeoutInterval:self.timeoutInterval];
 	[request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];  
 	_connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:YES];
+#if EGO_NO_ARC
 	[request release];
+#endif
 }
 
 - (void)cancel {
@@ -98,13 +104,18 @@
 	self.delegate = nil;
 	
 	#if __EGOIL_USE_BLOCKS
-	[handlers release], handlers = nil;
+#if EGO_NO_ARC
+	[handlers release];
+#endif
+    handlers = nil;
 	#endif
 
+#if EGO_NO_ARC
 	[_connection release];
 	[_imageURL release];
 	[_responseData release];
 	[super dealloc];
+#endif
 }
 
 @end

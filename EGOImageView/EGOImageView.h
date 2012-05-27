@@ -32,7 +32,11 @@
 @private
 	NSURL* imageURL;
 	UIImage* placeholderImage;
+#if EGO_NO_ARC
 	id<EGOImageViewDelegate> delegate;
+#else
+    __unsafe_unretained id<EGOImageViewDelegate> delegate;
+#endif
 }
 
 - (id)initWithPlaceholderImage:(UIImage*)anImage; // delegate:nil
@@ -42,7 +46,11 @@
 
 @property(nonatomic,retain) NSURL* imageURL;
 @property(nonatomic,retain) UIImage* placeholderImage;
+#if EGO_NO_ARC
 @property(nonatomic,assign) id<EGOImageViewDelegate> delegate;
+#else
+@property(nonatomic,unsafe_unretained) id<EGOImageViewDelegate> delegate;
+#endif
 @end
 
 @protocol EGOImageViewDelegate<NSObject>
