@@ -133,7 +133,7 @@ inline static NSString* keyForURL(NSURL* url, NSString* style) {
 		[currentConnections setObject:connection forKey:aURL];
 		self.currentConnections = [[currentConnections copy] autorelease];
 		[connectionsLock unlock];
-		[connection performSelector:@selector(start) withObject:nil afterDelay:0.01];
+        [connection performSelector:@selector(start) withObject:nil afterDelay:0.01 inModes:[NSArray arrayWithObject:NSRunLoopCommonModes]];
 		[connection release];
 		
 		return connection;

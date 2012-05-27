@@ -29,6 +29,7 @@
 
 @implementation EGOImageView
 @synthesize imageURL, placeholderImage, delegate;
+@synthesize loadedFromCache = _loadedFromCache;
 
 - (id)initWithPlaceholderImage:(UIImage*)anImage {
 	return [self initWithPlaceholderImage:anImage delegate:nil];	
@@ -63,13 +64,14 @@
 	
 	if(anImage) {
 		self.image = anImage;
-
+        _loadedFromCache = YES;
 		// trigger the delegate callback if the image was found in the cache
 		if([self.delegate respondsToSelector:@selector(imageViewLoadedImage:)]) {
 			[self.delegate imageViewLoadedImage:self];
 		}
 	} else {
 		self.image = self.placeholderImage;
+        _loadedFromCache = NO;
 	}
 }
 
@@ -87,6 +89,7 @@
 	UIImage* anImage = [[notification userInfo] objectForKey:@"image"];
 	self.image = anImage;
 	[self setNeedsDisplay];
+    _loadedFromCache = NO;
 	
 	if([self.delegate respondsToSelector:@selector(imageViewLoadedImage:)]) {
 		[self.delegate imageViewLoadedImage:self];
